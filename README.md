@@ -1,5 +1,19 @@
 # Overview
 
+**NM Modified version**  
+See `newfeatures.html` for a demo of the new feature ideas in action.  
+(note the old examples need their css changing to handle the new prev / next year features - not done yet)
+
+**Changes are:**  
+* fixed the obvious bugs in the other issues (the Feb 2016 and related things)  
+* added year prev / next buttons.  
+* modified the factory (setCibulCalendar) to instantiate immediately and return the calendar object so methods like setSelected can be called on it. (rather than instantiate the object via new CibulCalendar in a div which is awkward to integrate).  
+* modified the `_init` method to update the input field value and fire change if there is a selected option.  
+* fixed the basic css up a bit (z-index etc.).  
+* Temporarily commented out non-english built-in language strings.  
+
+**Old info:**
+
 CibulCalendar is a date picker that enables users to easily pick dates or date ranges.
 
 Here is the simplest way to get it running:

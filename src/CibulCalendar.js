@@ -1,6 +1,8 @@
 /*!
  * CibulCalendar v0.2.7 ~ Copyright (c) 2013 Kari Olafsson, http://tech.cibul.net
  * Released under MIT license, http://opensource.org/licenses/mit-license.php
+ * 
+ * NM - modified to fix various bugs.
  */
 
 (function( root, factory ) {
@@ -44,12 +46,17 @@
         firstDayOfWeek: 1,
         selected: false,
         filter: false,
-        template: '<div class="calhead"><ul class="calmonthnav"><li class="calprevmonth"><span>#navprev</span></li><li class="calmonth"><span class="month">#title</span></li><li class="calnextmonth"><span>#navnext</span></li></ul><ul class="calweekdays"><li><span>#wd0</span></li><li><span>#wd1</span></li><li><span>#wd2</span></li><li><span>#wd3</span></li><li><span>#wd4</span></li><li><span>#wd5</span></li><li><span>#wd6</span></li></ul></div><div class="calbody"><ul><li#cls00><span>#d00</span></li><li#cls01><span>#d01</span></li><li#cls02><span>#d02</span></li><li#cls03><span>#d03</span></li><li#cls04><span>#d04</span></li><li#cls05><span>#d05</span></li><li#cls06><span>#d06</span></li></ul><ul><li#cls07><span>#d07</span></li><li#cls08><span>#d08</span></li><li#cls09><span>#d09</span></li><li#cls10><span>#d10</span></li><li#cls11><span>#d11</span></li><li#cls12><span>#d12</span></li><li#cls13><span>#d13</span></li></ul><ul><li#cls14><span>#d14</span></li><li#cls15><span>#d15</span></li><li#cls16><span>#d16</span></li><li#cls17><span>#d17</span></li><li#cls18><span>#d18</span></li><li#cls19><span>#d19</span></li><li#cls20><span>#d20</span></li></ul><ul><li#cls21><span>#d21</span></li><li#cls22><span>#d22</span></li><li#cls23><span>#d23</span></li><li#cls24><span>#d24</span></li><li#cls25><span>#d25</span></li><li#cls26><span>#d26</span></li><li#cls27><span>#d27</span></li></ul><ul><li#cls28><span>#d28</span></li><li#cls29><span>#d29</span></li><li#cls30><span>#d30</span></li><li#cls31><span>#d31</span></li><li#cls32><span>#d32</span></li><li#cls33><span>#d33</span></li><li#cls34><span>#d34</span></li></ul><ul><li#cls35><span>#d35</span></li><li#cls36><span>#d36</span></li><li#cls37><span>#d37</span></li><li#cls38><span>#d38</span></li><li#cls39><span>#d39</span></li><li#cls40><span>#d40</span></li><li#cls41><span>#d41</span></li></ul></div>',
+        //NM - added prev/next year to template
+        template: '<div class="calhead"><ul class="calmonthnav"><li class="calprevyear"><span>#navprevy</span></li><li class="calprevmonth"><span>#navprev</span></li><li class="calmonth"><span class="month">#title</span></li><li class="calnextmonth"><span>#navnext</span></li><li class="calnextyear"><span>#navnexty</span></li></ul><ul class="calweekdays"><li><span>#wd0</span></li><li><span>#wd1</span></li><li><span>#wd2</span></li><li><span>#wd3</span></li><li><span>#wd4</span></li><li><span>#wd5</span></li><li><span>#wd6</span></li></ul></div><div class="calbody"><ul><li#cls00><span>#d00</span></li><li#cls01><span>#d01</span></li><li#cls02><span>#d02</span></li><li#cls03><span>#d03</span></li><li#cls04><span>#d04</span></li><li#cls05><span>#d05</span></li><li#cls06><span>#d06</span></li></ul><ul><li#cls07><span>#d07</span></li><li#cls08><span>#d08</span></li><li#cls09><span>#d09</span></li><li#cls10><span>#d10</span></li><li#cls11><span>#d11</span></li><li#cls12><span>#d12</span></li><li#cls13><span>#d13</span></li></ul><ul><li#cls14><span>#d14</span></li><li#cls15><span>#d15</span></li><li#cls16><span>#d16</span></li><li#cls17><span>#d17</span></li><li#cls18><span>#d18</span></li><li#cls19><span>#d19</span></li><li#cls20><span>#d20</span></li></ul><ul><li#cls21><span>#d21</span></li><li#cls22><span>#d22</span></li><li#cls23><span>#d23</span></li><li#cls24><span>#d24</span></li><li#cls25><span>#d25</span></li><li#cls26><span>#d26</span></li><li#cls27><span>#d27</span></li></ul><ul><li#cls28><span>#d28</span></li><li#cls29><span>#d29</span></li><li#cls30><span>#d30</span></li><li#cls31><span>#d31</span></li><li#cls32><span>#d32</span></li><li#cls33><span>#d33</span></li><li#cls34><span>#d34</span></li></ul><ul><li#cls35><span>#d35</span></li><li#cls36><span>#d36</span></li><li#cls37><span>#d37</span></li><li#cls38><span>#d38</span></li><li#cls39><span>#d39</span></li><li#cls40><span>#d40</span></li><li#cls41><span>#d41</span></li></ul></div>',
         classes: extend({
           calendar: 'ccal',
-          locale: extend({en:'en', fr:'fr', it:'it', es:'es', sv:'sv', no:'no', da:'da', ar:'ar', de: 'de'}),
+          //NM - make english only
+          locale: extend({en:'en'/*, fr:'fr', it:'it', es:'es', sv:'sv', no:'no', da:'da', ar:'ar', de: 'de'*/}),
           navDomPrev: 'calprevmonth',
           navDomNext: 'calnextmonth',
+          //NM - added prev and next year
+          navDomPrevYear: 'calprevyear',
+          navDomNextYear: 'calnextyear',
           calendarBody: 'calbody',
           selected: 'selected',
           preSelected: 'preselected',
@@ -60,9 +67,13 @@
           disabled: 'disabled',
           originCalendar: 'origincal',
         }, options.classes?options.classes:{}),
-        navDomContent: { prev: '<', next: '>'},
+        //NM - added year next/prev
+        navDomContent: { prev: '<', next: '>', prevy: '<<', nexty: '>>'},
         monthNames: extend({
-          en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          //NM - shortened month names ready to fit year back and fwd on header
+          //NM - commented out non-english
+          en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'] /*,
+          //en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
           fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
           it: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
           es: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Augosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -71,9 +82,11 @@
           da: ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
           ar: ['دجمبر','نونبر','أكتوبر','شتمبر','غشت','يوليو','يونيو','ماي','أبريل','مارس','فبراير','يناير'],
           de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+*/
         }, options.monthNames?options.monthNames:{}),
         weekDays: extend({
-          en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          //NM - commented out non-english
+          en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']/*,
           fr: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
           it: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
           es: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
@@ -82,15 +95,19 @@
           da: ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
           ar: ['اﻷحد','السبت','الجمعة','الخميس','اﻷربعاء','الثلاتاء','اﻷتنين'],
           de: ['Son', 'Mon', 'Die', 'Mit', 'Don', 'Fre', 'Sam']
+*/
         }, options.weekDays),
-        switchMonthOnHoverDelay: 800,
+        switchMonthOnHoverDelay: 800
       }, options),
       displayedCalendarElement: false,
       preSelection: false,
       selecting: false,
-      element: element,
+      element: element
     });
-
+    
+    // Select the first day of the month - NM: ADDED FIX FROM GITHUB
+    this.options.init = new Date(this.options.init.getFullYear(), this.options.init.getMonth(), 1);
+    
     this.enabled = this.options.enabled;
 
     this.setSelected(this.options.selected);
@@ -133,24 +150,50 @@
 
     },
 
-    setSelected: function( selected, updateMonth ) {
+    //NM - added next and previous years
+    showNextYear: function() {
+
+      if ( !this.enabled ) return;
+
+      this._incDisplayedYear();
+
+    },
+
+    showPreviousYear: function() {
+
+      if ( !this.enabled ) return;
+
+      this._decDisplayedYear();
+
+    },
+    
+
+    setSelected: function( selected, updateMonth, doUpdate ) {
 
       if ( selected ) {
 
-        if ( typeof selected.begin == 'undefined' ) selected = { begin: selected, end: selected };
+        if ( typeof selected.begin === 'undefined' ){ 
+            selected = { begin: selected, end: selected };
+        };
         
-        if ( typeof updateMonth == 'undefined' ) updateMonth = true;
+        if ( typeof updateMonth === 'undefined' ) {
+            updateMonth = true;
+        };
 
         this.selection = ( selected.begin > selected.end ) ? { begin: selected.end, end: selected.begin } : selected;
 
         if ( this.selection && updateMonth ) {
-
-          this.setDisplayedMonth( new Date( this.selection.begin.getTime() ) );
+            //NM - force to 1st of month
+            this.setDisplayedMonth( new Date(this.selection.begin.getFullYear(), this.selection.begin.getMonth(), 1) );
 
         } else {
 
           this._renderSelection( this.selection );
 
+        }
+        //NM - trigger update on selection        
+        if ( typeof this.options.onSelect !== 'undefined' && doUpdate) {
+            this.options.onSelect( this.selection );
         }
 
       } else {
@@ -173,7 +216,7 @@
 
     _getSelected: function() {
 
-      if ( typeof this.selection == 'undefined' ) this.selection = false;
+      if ( typeof this.selection === 'undefined' ) this.selection = false;
 
       return this.selection;
 
@@ -202,6 +245,17 @@
         self.showNext();
 
       });
+
+      //NM -added next and previous year
+      addEvent( getElementsByClassName(this.displayedCalendarElement, this.options.classes.navDomPrevYear )[0], 'click', function( listItem ) {
+        self.showPreviousYear();
+
+      });
+      addEvent( getElementsByClassName(this.displayedCalendarElement, this.options.classes.navDomNextYear )[0], 'click', function( listItem ) {
+        self.showNextYear();
+
+      });
+      
 
       // selection behavior on date elements
       forEach( getElementsByClassName(this.displayedCalendarElement, this.options.classes.calendarBody )[0].getElementsByTagName( 'li' ), function( listItem ){
@@ -232,7 +286,7 @@
 
       this._renderCalendar();
 
-      if ( typeof this.options.onSelect != 'undefined' ) this.options.onSelect( this.selection );
+      if ( typeof this.options.onSelect !== 'undefined' ) this.options.onSelect( this.selection );
 
     },
 
@@ -310,28 +364,37 @@
         this.preSelection = { begin: date, end: date };
 
       }
-
-      this._switchMonthOnTimer( listItem, date );
-
+    //* NM - allow hover switching to be disabled
+    if(this.options.switchMonthOnHoverDelay !== 0){
+      this._switchMonthOnTimer( listItem, date ); 
+    }
+    //*/
       this._renderSelection( this.preSelection, true );
 
     },
 
     _completePreselection: function( listItem ) {
 
-      if ( hasTouch ) document.getElementsByTagName( 'body' )[0].removeEventListener( 'touchmove', this._preventDefaultBodyMove, false );
+        if ( hasTouch ) {
+            document.getElementsByTagName( 'body' )[0].removeEventListener( 'touchmove', this._preventDefaultBodyMove, false );
+        };
+        
+        this.currentListItem = false;
 
-      this.currentListItem = false;
+        this.setSelected(this.preSelection, false);
 
-      this.setSelected(this.preSelection, false);
+        this._renderSelection(this.selection);
 
-      this._renderSelection(this.selection);
+        this.preSelection = false;
 
-      this.preSelection = false;
+        if ( typeof this.options.onSelect !== 'undefined' ) {
+            this.options.onSelect( this.options.range?this.selection:this.selection.begin );
+        };
+          
+        this._clearHoverTimer();
 
-      if ( typeof this.options.onSelect != 'undefined' ) this.options.onSelect( this.options.range?this.selection:this.selection.begin );
-
-      this._clearHoverTimer();
+        //NM - update displayed month to be current one selected
+        this.setDisplayedMonth( new Date(this.selection.begin.getFullYear(), this.selection.begin.getMonth(), 1) );
 
     },
 
@@ -364,7 +427,7 @@
 
       if ( toggle ) {
 
-        if ( typeof this.hoverTimer == 'undefined' ) this.hoverTimer = setTimeout( function(){
+        if ( typeof this.hoverTimer === 'undefined' ) this.hoverTimer = setTimeout( function(){
 
           if ( toggle == 'next' ) {
 
@@ -399,16 +462,13 @@
     _getDateFromElement: function( liElement ) {
 
       var ulIndex = getChildIndex( liElement.parentNode ),
-
       incMonth = 0,
-
       dateValue = parseInt( liElement.getElementsByTagName('span')[0].innerHTML, 10 ),
-
       displayedMonth = this._getDisplayedMonth();
 
       if ( (ulIndex===0) && (dateValue>10) ) incMonth = -1;
-
-      if ( (ulIndex>=4) && (dateValue<12) ) incMonth = 1;
+      //NM - fixed here
+      if ( (ulIndex>=4) && (dateValue<15) /*(dateValue<12)*/ ) incMonth = 1;
 
       return new Date( displayedMonth.getFullYear(), displayedMonth.getMonth() + incMonth, dateValue );
 
@@ -433,10 +493,24 @@
       this.setDisplayedMonth( displayedMonth );
 
     },
+    
+    //NM - add year inc and dec
+    _incDisplayedYear: function() {
 
+      var displayedMonth = this._getDisplayedMonth();
+      displayedMonth.setFullYear( displayedMonth.getFullYear()+1 );
+      this.setDisplayedMonth( displayedMonth );
+    },
+    _decDisplayedYear: function() {
+
+      var displayedMonth = this._getDisplayedMonth();
+      displayedMonth.setFullYear( displayedMonth.getFullYear()-1 );
+      this.setDisplayedMonth( displayedMonth );
+    },
+    
     _getDisplayedMonth: function() {
 
-      if ( typeof this.displayedMonth == 'undefined' ) this.displayedMonth = this.options.init;
+      if ( typeof this.displayedMonth === 'undefined' ) this.displayedMonth = this.options.init;
 
       return this.displayedMonth;
 
@@ -461,30 +535,33 @@
       if ( !this.displayedCalendarElement ) return;
 
       var iDate = false, 
-      
       i=0, 
-      
       classes,
-      
       self = this,
-      
       currentMonth = self._getDisplayedMonth().getMonth();
-        
-      preSelection = (typeof preSelection == 'undefined') ? false : preSelection;
+       
+      preSelection = (typeof preSelection === 'undefined') ? false : preSelection;
 
       forEach(getElementsByClassName(this.displayedCalendarElement, this.options.classes.calendarBody)[0].getElementsByTagName('li'), function(listItem) {
       
         classes = [];
 
-        if (!iDate) iDate = self._getDateFromElement(listItem);
+        if (!iDate) {
+            iDate = self._getDateFromElement(listItem);
+        }else {
+            iDate.setDate(iDate.getDate()+1);
+        }
 
-        else iDate.setDate(iDate.getDate()+1);
+        if (self._isWithinRange(iDate, selection)) {
+            classes.push(preSelection?self.options.classes.preSelected:self.options.classes.selected);
+        }
 
-        if (self._isWithinRange(iDate, selection)) classes.push(preSelection?self.options.classes.preSelected:self.options.classes.selected);
-
-        if (self._isToday(iDate)) classes.push(self.options.classes.today);
-
-        if (iDate.getMonth() != currentMonth) classes.push(self.options.classes[i++<7?'prevMonthDate':'nextMonthDate']);
+        if (self._isToday(iDate)) {
+            classes.push(self.options.classes.today);
+        }
+        if (iDate.getMonth() != currentMonth) {
+            classes.push(self.options.classes[i++ < 7 ? 'prevMonthDate' : 'nextMonthDate']);
+        }
 
         if (self.options.filter) classes = self.options.filter(iDate, classes);
 
@@ -528,8 +605,8 @@
 
         } else {
 
-          // 
-          if ((i>27) && (mSi<13)) {
+          // NM - fixed the feb 2016 and feb 2021 issue with next month dates being live (see github)
+          if ((i>27) && (mSi<15) /*&& (mSi<13)*/ ) {
 
             classes.push(this.options.classes.nextMonthDate);
             varMonth = 1;
@@ -564,6 +641,10 @@
       
       // render title
       render = render.replace('#title', this.options.monthNames[this.options.lang][displayedMonth.getMonth()] + ' ' + displayedMonth.getFullYear());
+
+      //NM - added year prev/next icons
+      //render
+      render = render.replace('#navprevy', this.options.navDomContent.prevy).replace('#navnexty', this.options.navDomContent.nexty);
 
       // render nav icons
 
@@ -707,13 +788,9 @@
     // on click elsewhere need to hide it
 
     var element = document.getElementById( elementId ),
-
     calCanvas,
-
     calendar,
-
     inFocus = false,
-
     _init = function() {
 
       options = extend({
@@ -721,7 +798,7 @@
         separator: ' - ',
         canvasClass: 'calendar-canvas',
         offset: {top: 5, left: 0 }
-      }, options?options:{});
+      }, options ? options : {});
 
       addEvent(element, 'click', _focus);
 
@@ -729,9 +806,22 @@
         if (!inFocus) _blur();
         inFocus = false;
       });
-
+      
+        //NM - if canvas doesnt exist, create it now - standard version lazy loaded on element focus
+        //in hidden mode - the first _focus call will finish setting it up
+        var cal;
+        if (!calCanvas) {
+            cal = _createCalendar(true);
+        }
+        //NM - if selected then set initial value
+        if(options.selected){
+            element.value = options.selected.begin ? _dateToString(options.selected.begin) : _dateToString(options.selected);
+            fireEvent(element, 'change');
+        }
+        
+        return cal;
     },
-
+            
     _focus = function() {
 
       inFocus = true;
@@ -749,47 +839,52 @@
       element.blur();
 
     },
-
+            
     _blur = function() {
 
       if (calCanvas) calCanvas.style.display = 'none';
 
     },
-
-    _createCalendar = function() {
+    //NM - added hide parameter to create in hidden mode
+    _createCalendar = function(hide) {
 
       calCanvas = document.createElement('div');
       calCanvas.className = options.canvasClass;
-
-      if (!element.parentNode.style.position) element.parentNode.style.position = 'relative';
+      
+      //NM - added facility to create hidden rather than visible
+      if(hide) calCanvas.style.display = 'none';
+      //NM - if in hide mode don't force the parent to relative - handled in css instead
+      if (!element.parentNode.style.position && !hide) element.parentNode.style.position = 'relative';
 
       calCanvas.style.position = 'absolute';
 
       addEvent(calCanvas, 'click', _focus);
 
       element.parentNode.appendChild(calCanvas);
-
-      new CibulCalendar(calCanvas, options);
-
+      
+        //NM - added return val for object
+        var cal = new CibulCalendar(calCanvas, options);
+        return cal;
     },
-
+            
     _onSelect = function( newSelection ) {
 
-      element.value = newSelection.begin?_dateToString(newSelection.begin) + (newSelection.begin!=newSelection.end?options.separator+_dateToString(newSelection.end):''):_dateToString(newSelection);
+      element.value = newSelection.begin ? _dateToString(newSelection.begin) + (newSelection.begin!=newSelection.end ? options.separator+_dateToString(newSelection.end) : '') : _dateToString(newSelection);
       fireEvent(element, 'change');
-
-      setTimeout(_blur,200);
+      //NM - set this delay much shorter to make it more responsive
+      setTimeout(_blur,1);//200);
     },
-
+            
     _dateToString = function( date ) {
       return _fZ(date.getDate()) + '/' + _fZ(date.getMonth()+1) + '/' + date.getFullYear();
     },
-
+            
     _fZ = function( n ) {
       return (n>9?'':'0') + n;
     };
-
-    _init();
+    
+    //NM - added return value   
+    return _init();
 
   },
 
