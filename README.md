@@ -8,9 +8,12 @@ See `newfeatures.html` for a demo of the new feature ideas in action.
 * fixed the obvious bugs in the other issues (the Feb 2016 and related things)  
 * added year prev / next buttons.  
 * modified the factory (setCibulCalendar) to instantiate immediately and return the calendar object so methods like setSelected can be called on it. (rather than instantiate the object via new CibulCalendar in a div which is awkward to integrate).  
-* modified the `_init` method to update the input field value and fire change if there is a selected option.  
+* modified the `_init` method to update the input field value and fire change event if there is a selected option.  
 * fixed the basic css up a bit (z-index etc.).  
-* Temporarily commented out non-english built-in language strings.  
+* Temporarily commented out non-english built-in language strings. 
+* made the delay after a new date has been selected as short as possible.   
+* added `dateToString` option that takes a callback that accepts a date object and returns a string representation that will be the value inserted into the input field. (defaults to dd/mm/yyyy)  
+* added `updateMonthOnSelect` option that, when `true`, updates the month viewed when a date is selected. (defaults to false)  
 
 **Old info:**
 

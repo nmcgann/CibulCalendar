@@ -102,7 +102,8 @@
       displayedCalendarElement: false,
       preSelection: false,
       selecting: false,
-      element: element
+      element: element,
+      updateMonthOnSelect: false //update month when selected (will adjust month when day outside selected)
     });
     
     // Select the first day of the month - NM: ADDED FIX FROM GITHUB
@@ -394,8 +395,9 @@
         this._clearHoverTimer();
 
         //NM - update displayed month to be current one selected
-        this.setDisplayedMonth( new Date(this.selection.begin.getFullYear(), this.selection.begin.getMonth(), 1) );
-
+        if(this.options.updateMonthOnSelect){
+            this.setDisplayedMonth( new Date(this.selection.begin.getFullYear(), this.selection.begin.getMonth(), 1) );
+        }
     },
 
     _switchMonthOnTimer: function( listItem, date ) {
@@ -797,7 +799,8 @@
         onSelect: _onSelect,
         separator: ' - ',
         canvasClass: 'calendar-canvas',
-        offset: {top: 5, left: 0 }
+        offset: {top: 5, left: 0 },
+        dateToString: _dateToString //NM - optional callback to convert date to string format
       }, options ? options : {});
 
       addEvent(element, 'click', _focus);
@@ -869,12 +872,12 @@
             
     _onSelect = function( newSelection ) {
 
-      element.value = newSelection.begin ? _dateToString(newSelection.begin) + (newSelection.begin!=newSelection.end ? options.separator+_dateToString(newSelection.end) : '') : _dateToString(newSelection);
+      element.value = newSelection.begin ? options.dateToString(newSelection.begin) + (newSelection.begin != newSelection.end ? options.separator+options.dateToString(newSelection.end) : '') : options.dateToString(newSelection);
       fireEvent(element, 'change');
       //NM - set this delay much shorter to make it more responsive
       setTimeout(_blur,1);//200);
     },
-            
+    //default conversion        
     _dateToString = function( date ) {
       return _fZ(date.getDate()) + '/' + _fZ(date.getMonth()+1) + '/' + date.getFullYear();
     },

@@ -57,6 +57,7 @@ New & modified features demo
             var cal = setCibulCalendar('dayBookDate',{
                 range: false,
                 switchMonthOnHoverDelay : 0, //disables hover delay when zero
+                updateMonthOnSelect:true,
                 //init: new Date()//('2021-02-01'), //('2017-01-01')//set initial date display (month)
                 selected: new Date('2015-03-31') //set slected date and displayed month
              });
@@ -65,7 +66,12 @@ New & modified features demo
                 range: false,
                 switchMonthOnHoverDelay : 0,
                 //init: new Date()//('2021-02-01'), //('2017-01-01')//
-                selected: new Date('2015-11-01')
+                selected: new Date('2015-11-01'),
+                dateToString: function(theDate){
+                    var _fZ = function(n) { return (n > 9 ? '' : '0') + n;};
+                    
+                    return (_fZ(theDate.getFullYear()) + '-' + _fZ(theDate.getMonth()+1) + '-' + _fZ(theDate.getDate()));
+                }
             });
             
             //modified version of factory returns CibulCalendar object
